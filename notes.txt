@@ -1,0 +1,39 @@
+
+
+# Start all services
+
+```
+roscore
+roslaunch usb_cam usb_cam_left.launch
+roslaunch usb_cam usb_cam_right.launch
+```
+
+# Camera calibration
+
+```
+rosrun camera_calibration cameracalibrator.py --size 8x6 --square 0.246 right:=/usb_cam/right/image_raw left:=/usb_cam/left/image_raw right_camera:=/usb_cam/right left_camera:=/usb_cam/left --approximate=0.1
+```
+
+# Building a catkin package that requires Python 2
+
+```
+catkin_make -DPYTHON_EXECUTABLE=/usr/bin/python2 -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so
+```
+
+
+For Nano (wheel control):
+
+~/arduino-1.6.9/arduino-cli --upload --board arduino:avr:nano:cpu=atmega168 --port /dev/ttyUSB0 -v wheel_control.ino
+
+
+Wheels:
+
+- 1 = front right
+- 2 = front left
+- 3 = rear right
+- 4 = rear left
+
+
+
+Arm: see diagram
+
