@@ -16,11 +16,11 @@ class Arm:
 
         self.elbowPosition = 0
         self.elbowMinPosition = 60
-        self.elbowMaxPosition = 230
+        self.elbowMaxPosition = 240
         self.elbowMotor = 1
         self.elbowUp = "B"
         self.elbowDown = "F"
-        self.elbowUpDelay = 43
+        self.elbowUpDelay = 49
         self.elbowDownDelay = 40
 
         self.wristPosition = 0
@@ -29,8 +29,8 @@ class Arm:
         self.wristMotor = 2
         self.wristUp = "F"
         self.wristDown = "B"
-        self.wristUpDelay = 47
-        self.wristDownDelay = 45
+        self.wristUpDelay = 49
+        self.wristDownDelay = 47
 
         self.shoulderPosition = 0
         self.shoulderMinPosition = 90
@@ -104,6 +104,8 @@ class Arm:
                 delay = diff * self.gripperCloseDelay
             self.activateMotor(self.gripperMotor, direction, delay)
             self.gripperPosition = pos
+        else:
+            raise Exception('gripper pos out of bounds: %d' % pos)
 
     def setElbowPosition(self, pos):
         if pos == self.elbowPosition: return
@@ -117,6 +119,8 @@ class Arm:
                 delay = diff * self.elbowUpDelay
             self.activateMotor(self.elbowMotor, direction, delay)
             self.elbowPosition = pos
+        else:
+            raise Exception('elbow pos out of bounds: %d' % pos)
 
     def setWristPosition(self, pos):
         if pos == self.wristPosition: return
@@ -130,6 +134,8 @@ class Arm:
                 delay = diff * self.wristUpDelay
             self.activateMotor(self.wristMotor, direction, delay)
             self.wristPosition = pos
+        else:
+            raise Exception('wrist pos out of bounds: %d' % pos)
 
     def setShoulderPosition(self, pos):
         if pos == self.shoulderPosition: return
@@ -143,6 +149,8 @@ class Arm:
                 delay = diff * self.shoulderUpDelay
             self.activateMotor(self.shoulderMotor, direction, delay)
             self.shoulderPosition = pos
+        else:
+            raise Exception('shoulder pos out of bounds: %d' % pos)
 
     def activateMotor(self, motor, direction, duration):
         self.sendMessage("M%d%s255D%dM%dR" % (motor, direction, duration, motor))
@@ -152,32 +160,34 @@ class Arm:
         self.com.write(msg)
 
     def grab(self):
+        self.setElbowPosition(200)
         self.setWristPosition(130)
-        raw_input()
-        self.setElbowPosition(190)
-        raw_input()
-        self.setShoulderPosition(185)
-        raw_input()
-        self.setElbowPosition(230)
-        raw_input()
-        self.setGripperPosition(2)
+        self.setElbowPosition(240)
+        self.setGripperPosition(1)
 
     def lift(self):
-        self.setElbowPosition(220)
-        self.setShoulderPosition(120)
+        self.setElbowPosition(180)
         self.setWristPosition(180)
+        self.setElbowPosition(120)
+        self.setWristPosition(220)
 
     def putDown(self):
-        self.setShoulderPosition(135)
-        self.setWristPosition(135)
-        self.setShoulderPosition(185)
-        self.setElbowPosition(220)
+        self.setWristPosition(130)
+        self.setElbowPosition(240)
         self.setGripperPosition(10)
 
 
 if __name__ == "__main__":
     arm = Arm()
     arm.calibrate()
+    raw_input("grab")
+    arm.grab()
+    raw_input("lift")
+    arm.lift()
+    raw_input("put down")
+    arm.putDown()
+    raw_input("reset")
+    arm.reset()
     raw_input("grab")
     arm.grab()
     raw_input("lift")
