@@ -11,8 +11,7 @@ roscore
 Start services
 
 ```
-roslaunch usb_cam usb_cam_left.launch
-roslaunch usb_cam usb_cam_right.launch
+roslaunch usb_cam usb_cams.launch
 ```
 
 ## View camera images
