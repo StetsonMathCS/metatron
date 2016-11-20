@@ -4,7 +4,7 @@ import types
 import curses
 
 if len(sys.argv) == 1:
-    print "Usage: python wheel-control.py /dev/ttyUSB0"
+    print "Usage: python2 wheel-control.py /dev/ttyUSB0"
     exit(-1)
 
 ser = None
@@ -58,9 +58,9 @@ def turn(angle_degrees):
     global current_action
     current_action = "Turning %d degrees" % angle_degrees
     if angle_degrees > 0:
-        accelerate(0, 20)
+        accelerate(0, 70)
     else:
-        accelerate(20, 0)
+        accelerate(70, 0)
 
 def status_display():
     global win, left_wheel_speed, right_wheel_speed, current_action
@@ -78,7 +78,7 @@ def main(w):
     win.clear()
     # start stopped
     kill()
-    win.timeout(1000)
+    win.timeout(500)
     key=""
     while True:
         status_display()
@@ -88,13 +88,13 @@ def main(w):
                 kill()
                 break 
             elif key == "KEY_UP":
-                forward(20)
+                forward(70)
             elif key == "KEY_DOWN":
-                forward(-20)
+                forward(-70)
             elif key == "KEY_LEFT":
-                turn(-20)
+                turn(70)
             elif key == "KEY_RIGHT":
-                turn(20)
+                turn(-70)
         except Exception as e:
             # No input
             stop()
